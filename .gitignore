@@ -1,0 +1,14 @@
+# OS / editor junk
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Local tooling / notes (not part of the published site)
+.claude/
+Claude.md
+
+# Unreferenced leftover asset (not used by the site)
+Ma4.png

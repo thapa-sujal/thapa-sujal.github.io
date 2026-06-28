@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sujal Thapa — Mechanical Engineer</title>
+  <meta name="description" content="Sujal Thapa — Mechanical Engineering student at Pulchowk Campus, TU. Surrogate modeling, CFD, scientific machine learning." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- MathJax for LaTeX in meditations -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: { 50: '#F9F9F7', 100: '#F4F4F0', 200: '#ECEAE4', 300: '#D8D8D2' },
+            terra: { 400: '#5A7090', 500: '#4A6080', 600: '#374B64' },
+            grove: { 500: '#5A7A6A', 600: '#445E54' },
+            ink: { 900: '#1A1E26', 800: '#252A36', 700: '#363C4A', 600: '#4A5060', 400: '#6A7280', 200: '#9AA0AA' },
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+            body: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── THEME TOKENS ─────────────────────────────── */
+    :root {
+      --bg:         #F4F4F0;
+      --surface:    #ECEAE4;
+      --card:       #F4F4F0;
+      --accent:     #4A6080;
+      --accent-lt:  #5A7090;
+      --accent-dk:  #374B64;
+      --accent-rgb: 74,96,128;
+      --sec-rgb:    90,122,106;
+      --tx1:        #1A1E26;
+      --tx2:        #252A36;
+      --tx3:        #363C4A;
+      --tx4:        #4A5060;
+      --tx5:        #6A7280;
+      --tx6:        #9AA0AA;
+      --sh-rgb:     26,30,38;
+      --nav-bg:     rgba(244,244,240,0.86);
+      --grain:      0.03;
+    }
+    [data-theme="dark"] {
+      --bg:         #111008;
+      --surface:    #1C1A12;
+      --card:       #1E1B11;
+      --accent:     #C9933A;
+      --accent-lt:  #D4A84A;
+      --accent-dk:  #A87828;
+      --accent-rgb: 201,147,58;
+      --sec-rgb:    138,122,90;
+      --tx1:        #E8DFCC;
+      --tx2:        #D0C8B4;
+      --tx3:        #B4AA94;
+      --tx4:        #988E78;
+      --tx5:        #786858;
+      --tx6:        #504030;
+      --sh-rgb:     0,0,0;
+      --nav-bg:     rgba(17,16,8,0.92);
+      --grain:      0.055;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background-color: var(--bg); color: var(--tx2); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
+
+    /* Grain */
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      pointer-events: none; z-index: 200; opacity: var(--grain);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px; transition: opacity 0.3s;
+    }
+
+    section { scroll-margin-top: 68px; }
+
+    /* Nav */
+    .nav-link {
+      position: relative; color: var(--tx5);
+      font-size: 0.8125rem; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1.5px; background: var(--accent);
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-link:hover { color: var(--accent); }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
+
+    /* Theme toggle */
+    #theme-toggle {
+      background: none; border: 1.5px solid rgba(var(--accent-rgb),0.25); cursor: pointer;
+      width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      color: var(--tx5); transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    #theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: rgba(var(--accent-rgb),0.07); }
+    #theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; background: var(--accent); color: var(--bg);
+      font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em;
+      border-radius: 5px; border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 2px 8px rgba(var(--accent-rgb),0.28);
+      transition: background 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    }
+    .btn-primary:hover { background: var(--accent-dk); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(var(--accent-rgb),0.38); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; background: transparent; color: var(--accent);
+      font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em;
+      border-radius: 5px; border: 1.5px solid var(--accent-lt); cursor: pointer; text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-outline:hover { background: rgba(var(--accent-rgb),0.07); border-color: var(--accent); transform: translateY(-2px); }
+    .btn-outline:active { transform: translateY(0); }
+    .btn-outline:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+    /* Cards */
+    .card {
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 1px 2px rgba(var(--accent-rgb),0.04), 0 4px 12px rgba(var(--accent-rgb),0.07), 0 12px 32px rgba(var(--sh-rgb),0.05);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 2px 4px rgba(var(--accent-rgb),0.06), 0 10px 28px rgba(var(--accent-rgb),0.13), 0 24px 48px rgba(var(--sh-rgb),0.09);
+    }
+
+    /* Tags */
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 0.78125rem; font-weight: 500; color: var(--accent); background: rgba(var(--accent-rgb),0.08); border: 1px solid rgba(var(--accent-rgb),0.18); }
+    .tag-sm { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.03em; color: var(--tx5); background: rgba(var(--accent-rgb),0.08); }
+
+    /* Social links */
+    .social-link { display: inline-flex; align-items: center; gap: 7px; color: var(--tx5); text-decoration: none; font-size: 0.9375rem; font-weight: 500; position: relative; transition: color 0.2s; }
+    .social-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1.5px; background: var(--accent); transition: width 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .social-link:hover { color: var(--accent); }
+    .social-link:hover::after { width: 100%; }
+    .social-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
+
+    .section-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 12px; }
+    .section-title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: clamp(2rem, 5vw, 3rem); color: var(--tx1); letter-spacing: -0.02em; line-height: 1.1; }
+
+    /* ── MEDITATIONS SECTION ── */
+    .essay-row {
+      width: 100%; background: none; border: none; border-top: 1px solid rgba(var(--accent-rgb),0.12);
+      padding: 28px 0; display: grid; grid-template-columns: 52px 1fr auto;
+      gap: 0 24px; align-items: start; cursor: pointer; text-align: left;
+      transition: background 0.18s;
+    }
+    .essay-row:last-child { border-bottom: 1px solid rgba(var(--accent-rgb),0.12); }
+    .essay-row:hover { background: rgba(var(--accent-rgb),0.03); }
+    .essay-row:hover .er-title { color: var(--accent); }
+    .essay-row:hover .er-arrow { opacity: 1; transform: translateX(4px); }
+    .essay-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+    .er-num { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--tx6); line-height: 1; padding-top: 3px; }
+    .er-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
+    .er-tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: rgba(var(--accent-rgb),0.08); border: 1px solid rgba(var(--accent-rgb),0.18); padding: 2px 8px; border-radius: 100px; }
+    .er-date { font-size: 0.8125rem; color: var(--tx6); }
+    .er-title { font-family: 'Cormorant Garamond', serif; font-size: 1.375rem; font-weight: 600; color: var(--tx1); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 7px; transition: color 0.2s; }
+    .er-preview { font-size: 0.875rem; line-height: 1.65; color: var(--tx5); max-width: 62ch; }
+    .er-arrow { font-size: 1.125rem; color: var(--accent); opacity: 0; transform: translateX(0); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); padding-top: 4px; }
+
+    /* ── ESSAY MODAL ── */
+    #essay-modal {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      align-items: flex-start; justify-content: center;
+      padding: 40px 24px 40px; overflow-y: auto;
+    }
+    #essay-modal.open #modal-backdrop { opacity: 1; }
+    #essay-modal.open #modal-content { opacity: 1; transform: translateY(0); }
+
+    #modal-backdrop {
+      position: fixed; inset: 0; background: rgba(var(--sh-rgb),0.55);
+      backdrop-filter: blur(4px); opacity: 0;
+      transition: opacity 0.3s; cursor: pointer;
+    }
+    #modal-content {
+      position: relative; z-index: 1;
+      background: var(--card); border-radius: 18px;
+      width: 100%; max-width: 680px; padding: 56px 60px;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1), background 0.3s;
+      box-shadow: 0 8px 40px rgba(var(--sh-rgb),0.18), 0 32px 80px rgba(var(--sh-rgb),0.1);
+    }
+    #modal-close {
+      position: absolute; top: 20px; right: 24px;
+      background: none; border: none; cursor: pointer;
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; color: var(--tx6);
+      transition: background 0.2s, color 0.2s;
+    }
+    #modal-close:hover { background: rgba(var(--accent-rgb),0.08); color: var(--accent); }
+    #modal-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .modal-body-text p { font-size: 1.0125rem; line-height: 1.85; color: var(--tx3); margin-bottom: 18px; }
+    .modal-body-text p:last-child { margin-bottom: 0; }
+    .modal-body-text a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-rgb),0.4); transition: color 0.2s, border-color 0.2s; }
+    .modal-body-text a:hover { color: var(--accent-lt); border-bottom-color: var(--accent); }
+    .modal-body-text a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+    .modal-body-text code { font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: 0.88em; background: rgba(var(--accent-rgb),0.08); padding: 1px 5px; border-radius: 4px; }
+    .modal-body-text blockquote { margin: 26px 0; padding: 2px 0 2px 24px; border-left: 2px solid var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; line-height: 1.5; color: var(--tx2); }
+    .modal-body-text blockquote a { font-style: normal; }
+    .modal-body-text ol { list-style: none; counter-reset: med; margin: 0 0 18px; padding: 0; }
+    .modal-body-text ol > li { counter-increment: med; position: relative; padding-left: 46px; margin-bottom: 24px; font-size: 1.0125rem; line-height: 1.85; color: var(--tx3); }
+    .modal-body-text ol > li:last-child { margin-bottom: 0; }
+    .modal-body-text ol > li::before { content: counter(med); position: absolute; left: 0; top: -2px; width: 30px; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--accent); text-align: right; }
+    .modal-body-text ol > li strong { color: var(--tx1); font-weight: 600; }
+    .modal-body-text figure.med-figure { margin: 32px 0; }
+    .modal-body-text figure.med-figure img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid rgba(var(--accent-rgb),0.15); background: #fff; box-shadow: 0 4px 18px rgba(var(--sh-rgb),0.08); }
+    .modal-body-text figure.med-figure figcaption { margin-top: 12px; font-size: 0.8125rem; line-height: 1.6; color: var(--tx5); text-align: center; }
+    .modal-body-text mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+    .modal-body-text mjx-container[display="true"] { margin: 20px 0; }
+
+    /* ── DARK MODE: inline-style overrides ───────── */
+    [data-theme="dark"] #site-nav { background: var(--nav-bg) !important; border-bottom-color: rgba(var(--accent-rgb),0.09) !important; }
+    [data-theme="dark"] #about,
+    [data-theme="dark"] #meditations,
+    [data-theme="dark"] #now       { background: var(--surface) !important; }
+    [data-theme="dark"] .card      { background: var(--surface) !important; }
+    [data-theme="dark"] footer      { background: var(--bg) !important; border-top-color: rgba(var(--accent-rgb),0.1) !important; }
+
+    /* inline text-colour overrides via attribute selectors */
+    [data-theme="dark"] [style*="color:#1A1E26"] { color: var(--tx1) !important; }
+    [data-theme="dark"] [style*="color:#252A36"] { color: var(--tx2) !important; }
+    [data-theme="dark"] [style*="color:#363C4A"] { color: var(--tx3) !important; }
+    [data-theme="dark"] [style*="color:#4A5060"] { color: var(--tx4) !important; }
+    [data-theme="dark"] [style*="color:#6A7280"] { color: var(--tx5) !important; }
+    [data-theme="dark"] [style*="color:#9AA0AA"] { color: var(--tx6) !important; }
+    [data-theme="dark"] [style*="color:#4A6080"] { color: var(--accent) !important; }
+    /* inline background overrides */
+    [data-theme="dark"] [style*="background:#ECEAE4"] { background: var(--surface) !important; }
+    [data-theme="dark"] [style*="background:#F4F4F0"]  { background: var(--card) !important; }
+    /* now-section cards stay light in dark mode so dark titles remain readable */
+    [data-theme="dark"] #now [style*="background:#F4F4F0"] { background: #F0ECE2 !important; }
+    [data-theme="dark"] #now [style*="color:#1A1E26"] { color: #1A1E26 !important; }
+    [data-theme="dark"] #now [style*="color:#6A7280"] { color: #6A7280 !important; }
+    [data-theme="dark"] #now [style*="color:#9AA0AA"] { color: #9AA0AA !important; }
+    [data-theme="dark"] #now [style*="color:#4A6080"] { color: #4A6080 !important; }
+
+    /* Scroll bounce */
+    @keyframes bounce-slow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+    .scroll-bounce { animation: bounce-slow 2.2s ease-in-out infinite; }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr !important; }
+      .three-col { grid-template-columns: 1fr !important; }
+      .hero-photo { display: none; }
+      #modal-content { padding: 40px 28px; }
+      .essay-row { grid-template-columns: 40px 1fr; }
+      .er-arrow { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       NAV
+  ══════════════════════════════════════════════ -->
+  <header id="site-nav" style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(244,244,240,0.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,96,128,0.09);transition:box-shadow 0.2s;">
+    <nav class="max-w-5xl mx-auto px-6" style="height:68px;display:flex;align-items:center;justify-content:space-between;">
+      <a href="#hero" style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1A1E26;text-decoration:none;letter-spacing:-0.025em;">
+        S<span style="color:#4A6080;font-style:italic;">.</span>T
+      </a>
+      <div style="display:flex;align-items:center;gap:32px;" class="hidden md:flex">
+        <a href="#about"     class="nav-link">About</a>
+        <a href="#projects"  class="nav-link">Research</a>
+        <a href="#meditations" class="nav-link">Articles</a>
+        <a href="#now"       class="nav-link">Now</a>
+        <a href="#contact"   class="nav-link">Contact</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button id="theme-toggle" aria-label="Toggle dark mode">
+          <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        <a href="#contact" class="btn-primary" style="padding:8px 18px;font-size:0.8125rem;">Get in Touch</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════ -->
+  <section id="hero" style="min-height:100vh;display:flex;align-items:center;padding-top:68px;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 900px 700px at 68% 28%,rgba(74,96,128,0.08) 0%,transparent 65%),radial-gradient(ellipse 650px 900px at 8% 78%,rgba(90,122,106,0.07) 0%,transparent 60%),radial-gradient(ellipse 450px 450px at 92% 88%,rgba(74,96,128,0.05) 0%,transparent 60%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="width:100%;padding-top:64px;padding-bottom:64px;position:relative;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="two-col">
+        <div>
+          <span class="section-label">Mechanical Engineer</span>
+          <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(3.25rem,8vw,5.75rem);font-weight:600;color:#1A1E26;letter-spacing:-0.03em;line-height:1.02;margin-bottom:24px;">
+            Sujal<br><em style="color:#4A6080;font-style:italic;">Thapa</em>
+          </h1>
+          <p style="font-size:1.075rem;line-height:1.8;color:#4A5060;max-width:42ch;margin-bottom:36px;">
+            Born and raised in Kathmandu, Nepal. Completed my Bachelor's in Mechanical Engineering from Pulchowk Campus, IOE. Fascinated by the intersection of real-world engineering problems and intelligent learning.<br><br>I specialize in surrogate models and scientific learning applications for structural, aerodynamic, and aeroelastic problems.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <a href="#projects" class="btn-primary">View Research</a>
+            <a href="CV-SujalThapa.pdf" class="btn-outline" target="_blank" rel="noopener">CV ↗</a>
+          </div>
+        </div>
+
+        <div class="hero-photo" style="display:flex;justify-content:flex-end;">
+          <div style="position:relative;">
+            <div style="width:300px;height:360px;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px rgba(74,96,128,0.12),0 24px 60px rgba(26,30,38,0.14);position:relative;">
+              <img src="711C74C2-DB4C-4090-9652-20A6BBF59AA4.JPG.jpeg" alt="Sujal Thapa" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" />
+              <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(74,96,128,0.1) 0%,transparent 55%);mix-blend-mode:multiply;"></div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(26,30,38,0.3) 0%,transparent 45%);"></div>
+            </div>
+            <div style="position:absolute;bottom:-14px;right:-14px;width:88px;height:88px;border-radius:12px;background:linear-gradient(135deg,rgba(90,122,106,0.18),rgba(90,122,106,0.05));border:1px solid rgba(90,122,106,0.22);"></div>
+            <div style="position:absolute;top:-14px;left:-14px;width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,rgba(74,96,128,0.15),rgba(74,96,128,0.04));border:1px solid rgba(74,96,128,0.2);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:72px;display:flex;justify-content:center;">
+        <a href="#about" class="scroll-bounce" style="display:flex;flex-direction:column;align-items:center;gap:5px;color:#9AA0AA;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#4A6080'" onmouseout="this.style.color='#9AA0AA'">
+          <span style="font-size:0.6875rem;letter-spacing:0.12em;text-transform:uppercase;">Scroll</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       ABOUT
+  ══════════════════════════════════════════════ -->
+  <section id="about" style="background:#ECEAE4;padding:96px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;right:0;width:480px;height:480px;pointer-events:none;background:radial-gradient(ellipse at top right,rgba(74,96,128,0.07),transparent 65%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="position:relative;">
+      <div style="display:grid;grid-template-columns:2fr 3fr;gap:64px;align-items:start;" class="two-col">
+        <div>
+          <span class="section-label">About</span>
+          <h2 class="section-title">Profile</h2>
+          <div style="margin-top:32px;">
+            <p style="font-size:0.6875rem;letter-spacing:0.12em;text-transform:uppercase;color:#6A7280;margin-bottom:10px;">Research Interests</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <span class="tag">Surrogate Modeling & ML</span>
+              <span class="tag">Computational Fluid Dynamics</span>
+              <span class="tag">Hypersonic Aerodynamics</span>
+              <span class="tag">Scientific Machine Learning</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p style="font-size:1.0625rem;line-height:1.82;color:#363C4A;margin-bottom:20px;">
+            Hi! I am 23 right now, but I keep getting older all the time. I enjoy solving problems in nuanced ways (this just happens to involve machine learning modalities right now). However, the goal is to contribute to advancing the understanding of things, rather than just being able to approximate the solutions.
+          </p>
+          <p style="font-size:1.0625rem;line-height:1.82;color:#363C4A;">
+            The nerdy parts aside, I'm a pretty chill dude. I like paying my dues on the guitar, I can bench-press an adult giant panda or a young lion, and, to the detriment of my relationships, I love reading philosophy (primarily ethics, and only the Greeks at that).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       PROJECTS / RESEARCH
+  ══════════════════════════════════════════════ -->
+  <section id="projects" style="padding:96px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 700px 550px at 18% 55%,rgba(90,122,106,0.055) 0%,transparent 68%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="position:relative;">
+      <div style="margin-bottom:56px;">
+        <span class="section-label">Research & Projects</span>
+        <h2 class="section-title">Recent Projects</h2>
+      </div>
+
+      <!-- Featured -->
+      <div class="card" style="background:#ECEAE4;border:1px solid rgba(74,96,128,0.13);border-radius:18px;padding:36px 40px;margin-bottom:18px;">
+        <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;">
+          <div style="width:52px;height:52px;border-radius:13px;background:rgba(74,96,128,0.12);border:1px solid rgba(74,96,128,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A6080" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <p style="font-size:0.6875rem;letter-spacing:0.12em;text-transform:uppercase;color:#6A7280;margin-bottom:10px;">Final Year Project · 2025–2026</p>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:#1A1E26;letter-spacing:-0.01em;line-height:1.2;margin-bottom:14px;">
+              Surrogate-Based Modeling for Aeroelastic Simulation of a Hypersonic Intake
+            </h3>
+            <p style="font-size:0.9375rem;line-height:1.72;color:#4A5060;margin-bottom:20px;">
+              Built a gradient-informed Gaussian process surrogate (GEK) to model total pressure recovery of a hypersonic intake under structural deformation. Used Latin Hypercube Sampling for design-of-experiment, sensitivity simulations for gradient acquisition, and developed a reduced-order model for transient reconstruction from static snapshots.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="tag-sm">OpenFOAM</span>
+              <span class="tag-sm">GEK Surrogates</span>
+              <span class="tag-sm">ANSYS ICEM CFD</span>
+              <span class="tag-sm">Python / SMT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-col grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="three-col">
+        <div class="card" style="background:#ECEAE4;border:1px solid rgba(74,96,128,0.1);border-radius:14px;padding:28px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(90,122,106,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A7A6A" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+          </div>
+          <p style="font-size:0.6875rem;letter-spacing:0.1em;text-transform:uppercase;color:#6A7280;margin-bottom:8px;">AnK Internship · Oct 2025</p>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1A1E26;letter-spacing:-0.01em;margin-bottom:10px;line-height:1.25;">Stress Distribution Prediction via RegDGCNN</h3>
+          <p style="font-size:0.875rem;line-height:1.72;color:#4A5060;margin-bottom:16px;">
+            Implemented a Regression Dynamic Graph CNN to predict stress distributions on cellular beams of varying hole geometry — geometry prep, H5 data pipeline, model development, and validation.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="tag-sm">GNN</span><span class="tag-sm">FEM</span><span class="tag-sm">ANSYS</span>
+          </div>
+        </div>
+
+        <div class="card" style="background:#ECEAE4;border:1px solid rgba(74,96,128,0.1);border-radius:14px;padding:28px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(74,96,128,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6080" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <p style="font-size:0.6875rem;letter-spacing:0.1em;text-transform:uppercase;color:#6A7280;margin-bottom:8px;">Jun – Sep 2025</p>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1A1E26;letter-spacing:-0.01em;margin-bottom:10px;line-height:1.25;">Mesh Morphing for OpenFOAM via ISDW</h3>
+          <p style="font-size:0.875rem;line-height:1.72;color:#4A5060;margin-bottom:16px;">
+            Python script using Inverse Square Distance Weighting to morph OpenFOAM meshes algorithmically — eliminating manual re-meshing for parametric geometry studies.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="tag-sm">OpenFOAM</span><span class="tag-sm">Python</span><span class="tag-sm">Mesh Morphing</span>
+          </div>
+        </div>
+
+        <div class="card" style="background:#ECEAE4;border:1px solid rgba(74,96,128,0.1);border-radius:14px;padding:28px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(74,96,128,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6080" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 20V10M12 20V4M6 20v-6"/>
+            </svg>
+          </div>
+          <p style="font-size:0.6875rem;letter-spacing:0.1em;text-transform:uppercase;color:#6A7280;margin-bottom:8px;">Benchmark Study · Jun – Aug 2025</p>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1A1E26;letter-spacing:-0.01em;margin-bottom:10px;line-height:1.25;">GPR for Hypersonic Wedge Flow</h3>
+          <p style="font-size:0.875rem;line-height:1.72;color:#4A5060;margin-bottom:16px;">
+            Compared ordinary Kriging (OK) vs. gradient-enhanced Kriging (GEK) on a hypersonic wedge flow, quantifying wall-clock savings from using sensitivity simulations as additional training signal.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="tag-sm">Kriging / GEK</span><span class="tag-sm">Hypersonics</span><span class="tag-sm">LHS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       MEDITATIONS
+       To publish: add a .md file to meditations/ and run
+       python3 build_meditations.py
+  ══════════════════════════════════════════════ -->
+  <section id="meditations" style="background:#ECEAE4;padding:96px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;right:0;width:500px;height:500px;pointer-events:none;background:radial-gradient(ellipse at top right,rgba(90,122,106,0.06),transparent 65%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="position:relative;">
+      <div style="margin-bottom:56px;">
+        <span class="section-label">Articles</span>
+        <h2 class="section-title">Articles</h2>
+        <p style="margin-top:14px;font-size:1rem;line-height:1.75;color:#4A5060;max-width:50ch;">
+        
+        </p>
+      </div>
+
+      <!-- Rendered by build_meditations.py + meditations-data.js -->
+      <div id="meditations-list"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       NOW — CURRENTLY READING & WATCHING
+       To refresh: python3 build_live.py
+  ══════════════════════════════════════════════ -->
+  <section id="now" style="background:#ECEAE4;padding:96px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;width:480px;height:480px;pointer-events:none;background:radial-gradient(ellipse at top left,rgba(74,96,128,0.06),transparent 65%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="position:relative;">
+      <div style="margin-bottom:56px;">
+        <span class="section-label">Now</span>
+        <h2 class="section-title">Library</h2>
+        <p style="margin-top:14px;font-size:1rem;line-height:1.75;color:#4A5060;max-width:52ch;">
+          Recent activities pulled from my Goodreads and Letterboxd. 
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;" class="two-col">
+        <!-- Currently Reading -->
+        <div>
+          <a href="https://www.goodreads.com/user/show/77176951-suzal-thapa" target="_blank" rel="noopener" style="font-size:0.7rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#4A6080;margin-bottom:20px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Recently Read ↗
+          </a>
+          <div id="now-books"></div>
+        </div>
+        <!-- Recently Watched -->
+        <div>
+          <a href="https://letterboxd.com/suzal007/" target="_blank" rel="noopener" style="font-size:0.7rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#4A6080;margin-bottom:20px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+            Recently Watched ↗
+          </a>
+          <div id="now-films"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       CONTACT
+  ══════════════════════════════════════════════ -->
+  <section id="contact" style="padding:96px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 800px 600px at 50% 50%,rgba(74,96,128,0.055) 0%,transparent 68%);"></div>
+
+    <div class="max-w-5xl mx-auto px-6" style="position:relative;text-align:center;">
+      <span class="section-label">Contact</span>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.75rem,7vw,4.5rem);font-weight:600;color:#1A1E26;letter-spacing:-0.03em;line-height:1.08;margin-bottom:20px;">Let's Talk</h2>
+      <p style="font-size:1.0625rem;line-height:1.78;color:#4A5060;max-width:46ch;margin:0 auto 40px;">
+        I'd love to hear from you.
+      </p>
+      <a href="mailto:078bme044.sujal@pcampus.edu.np" class="btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          078bme044.sujal@pcampus.edu.np
+        </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════ -->
+  <footer style="padding:28px 0;border-top:1px solid rgba(74,96,128,0.1);">
+    <div class="max-w-5xl mx-auto px-6" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+      <p style="font-size:0.8125rem;color:#9AA0AA;">© 2026 Sujal Thapa.</p>
+      <p style="font-size:0.8125rem;color:#9AA0AA;">Mechanical Engineering · Pulchowk Campus, TU</p>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════
+       ESSAY MODAL
+  ══════════════════════════════════════════════ -->
+  <div id="essay-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="modal-backdrop" onclick="closeEssayModal()"></div>
+    <div id="modal-content">
+      <button id="modal-close" onclick="closeEssayModal()" aria-label="Close essay">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span id="modal-tag" style="font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#4A6080;background:rgba(74,96,128,0.08);border:1px solid rgba(74,96,128,0.18);padding:2px 8px;border-radius:100px;"></span>
+        <span id="modal-date" style="font-size:0.8125rem;color:#9AA0AA;"></span>
+      </div>
+
+      <h2 id="modal-title" style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.75rem,4vw,2.5rem);font-weight:600;color:#1A1E26;letter-spacing:-0.02em;line-height:1.12;margin-bottom:32px;"></h2>
+
+      <div style="width:40px;height:2px;background:#4A6080;border-radius:2px;margin-bottom:32px;"></div>
+
+      <div id="modal-body" class="modal-body-text"></div>
+    </div>
+  </div>
+
+  <!-- meditations-data.js is generated by: python3 build_meditations.py -->
+  <script src="meditations-data.js"></script>
+  <!-- live-data.js is generated by: python3 build_live.py -->
+  <script src="live-data.js"></script>
+  <script>
+
+    // Render most recent meditation only; links to meditations.html for full archive
+    function renderMeditations() {
+      const container = document.getElementById('meditations-list');
+      if (!container) return;
+      if (typeof MEDITATIONS === 'undefined' || MEDITATIONS.length === 0) {
+        container.innerHTML = '<p style="color:#9AA0AA;font-size:0.875rem;padding:24px 0;">No articles yet. Run <code>python3 build_meditations.py</code> after adding .md files.</p>';
+        return;
+      }
+      const m = MEDITATIONS[0];
+      container.innerHTML = `
+        <button class="essay-row" onclick="openMeditationModal(0)" aria-label="Read: ${m.title}">
+          <span class="er-num">01</span>
+          <div>
+            <div class="er-meta">
+              <span class="er-tag">${m.tag}</span>
+              <span class="er-date">${m.date}</span>
+            </div>
+            <div class="er-title">${m.title}</div>
+            <div class="er-preview">${m.preview}</div>
+          </div>
+          <span class="er-arrow" aria-hidden="true">\u2192</span>
+        </button>
+        <div style="margin-top:28px;padding-top:28px;border-top:1px solid rgba(74,96,128,0.12);display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:0.8125rem;color:#9AA0AA;">${MEDITATIONS.length} article${MEDITATIONS.length === 1 ? '' : 's'} total</span>
+          ${MEDITATIONS.length > 1 ? `<a href="meditations.html" style="display:inline-flex;align-items:center;gap:6px;font-size:0.875rem;font-weight:500;color:#4A6080;text-decoration:none;letter-spacing:0.02em;transition:gap 0.2s;" onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">View all articles <span>\u2192</span></a>` : ''}
+        </div>
+      `;
+    }
+
+    function openMeditationModal(index) {
+      const m     = MEDITATIONS[index];
+      const modal = document.getElementById('essay-modal');
+      document.getElementById('modal-tag').textContent   = m.tag;
+      document.getElementById('modal-date').textContent  = m.date;
+      document.getElementById('modal-title').textContent = m.title;
+      const body = document.getElementById('modal-body');
+      body.innerHTML = m.body;
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetClear && MathJax.typesetClear([body]);
+        MathJax.typesetPromise([body]);
+      }
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => modal.classList.add('open'));
+      document.getElementById('modal-close').focus();
+    }
+
+    function closeEssayModal() {
+      const modal = document.getElementById('essay-modal');
+      modal.classList.remove('open');
+      setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 320);
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEssayModal(); });
+
+
+    // ── Now: reading & watching ──────────────────────────────────────
+    function ratingToStars(r) {
+      const n = parseFloat(r);
+      if (!n) return '';
+      const full = Math.floor(n);
+      const half = (n % 1) >= 0.5;
+      return '★'.repeat(full) + (half ? '½' : '');
+    }
+
+    function renderNow() {
+      if (typeof LIVE_DATA === 'undefined') return;
+
+      const booksEl = document.getElementById('now-books');
+      const filmsEl = document.getElementById('now-films');
+
+      if (booksEl) {
+        const books = LIVE_DATA.books || [];
+        if (books.length === 0) {
+          booksEl.innerHTML = '<p style="font-size:0.875rem;color:#9AA0AA;padding:8px 0;">No books tracked yet.</p>';
+        } else {
+          booksEl.innerHTML = books.map(b => {
+            const coverHtml = b.cover
+              ? `<img src="${b.cover}" alt="" style="width:52px;height:auto;border-radius:4px;box-shadow:0 2px 8px rgba(26,30,38,0.18);flex-shrink:0;display:block;" />`
+              : `<div style="width:52px;height:72px;border-radius:4px;background:rgba(74,96,128,0.12);flex-shrink:0;"></div>`;
+            const stars = ratingToStars(b.rating);
+            return `<a href="${b.url}" target="_blank" rel="noopener"
+              style="display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;text-decoration:none;
+                     padding:16px;border-radius:12px;border:1px solid rgba(74,96,128,0.11);
+                     background:#F4F4F0;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.22s;"
+              onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(26,30,38,0.1)'"
+              onmouseout="this.style.transform='';this.style.boxShadow=''">
+              ${coverHtml}
+              <div style="min-width:0;">
+                <p style="font-family:'Cormorant Garamond',serif;font-size:1.075rem;font-weight:600;color:#1A1E26;line-height:1.3;margin-bottom:4px;">${b.title}</p>
+                <p style="font-size:0.8125rem;color:#6A7280;margin-bottom:${stars ? '5px' : '0'};">${b.author}</p>
+                ${stars ? `<p style="font-size:0.8rem;color:#4A6080;letter-spacing:0.03em;">${stars}</p>` : ''}
+              </div>
+            </a>`;
+          }).join('');
+        }
+      }
+
+      if (filmsEl) {
+        const films = LIVE_DATA.films || [];
+        if (films.length === 0) {
+          filmsEl.innerHTML = `
+            <div style="padding:20px 0;">
+              <p style="font-size:0.875rem;color:#9AA0AA;margin-bottom:10px;">Nothing logged on Letterboxd yet.</p>
+              <a href="https://letterboxd.com/Suzal007/" target="_blank" rel="noopener"
+                 style="font-size:0.8125rem;color:#4A6080;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:gap 0.2s;"
+                 onmouseover="this.style.gap='8px'" onmouseout="this.style.gap='5px'">
+                View Letterboxd profile →
+              </a>
+            </div>`;
+        } else {
+          filmsEl.innerHTML = films.map(f => {
+            const stars = ratingToStars(f.rating);
+            const posterHtml = f.poster
+              ? `<img src="${f.poster}" alt="" style="width:48px;height:auto;border-radius:4px;box-shadow:0 2px 8px rgba(26,30,38,0.18);flex-shrink:0;display:block;" />`
+              : `<div style="width:48px;height:68px;border-radius:4px;background:rgba(74,96,128,0.12);flex-shrink:0;"></div>`;
+            return `<a href="${f.url}" target="_blank" rel="noopener"
+              style="display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;text-decoration:none;
+                     padding:16px;border-radius:12px;border:1px solid rgba(74,96,128,0.11);
+                     background:#F4F4F0;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.22s;"
+              onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(26,30,38,0.1)'"
+              onmouseout="this.style.transform='';this.style.boxShadow=''">
+              ${posterHtml}
+              <div style="min-width:0;">
+                <p style="font-family:'Cormorant Garamond',serif;font-size:1.075rem;font-weight:600;color:#1A1E26;line-height:1.3;margin-bottom:4px;">${f.title}${f.year ? ` <span style="font-weight:400;color:#9AA0AA;font-size:0.9rem;">(${f.year})</span>` : ''}</p>
+                ${stars ? `<p style="font-size:0.875rem;color:#4A6080;letter-spacing:0.05em;">${stars}</p>` : ''}
+              </div>
+            </a>`;
+          }).join('');
+        }
+      }
+    }
+
+    // ── Nav scroll shadow ────────────────────────────────────────────
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => {
+      nav.style.boxShadow = window.scrollY > 20 ? '0 2px 16px rgba(26,30,38,0.08)' : 'none';
+    }, { passive: true });
+
+    renderNow();
+    renderMeditations();
+
+    // ── Theme toggle ─────────────────────────────────────────────────
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('icon-moon').style.display = theme === 'dark' ? 'none'  : '';
+      document.getElementById('icon-sun').style.display  = theme === 'dark' ? ''      : 'none';
+    }
+    applyTheme(localStorage.getItem('theme') || 'light');
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    });
+
+  </script>
+</body>
