@@ -3,12 +3,15 @@
 build_live.py — fetches recently-read books from Goodreads and recent films
 from Letterboxd, then writes live-data.js for the portfolio site.
 
-Run: python3 build_live.py
+Run manually: python3 build_live.py
+The deployed site also refreshes this file automatically through GitHub Actions.
 """
 
 import re
 import json
 import ssl
+import time
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from html import unescape
@@ -17,7 +20,7 @@ from html import unescape
 # create an unverified context for these personal-data requests.
 _ctx = ssl._create_unverified_context()
 
-GOODREADS_RSS  = "https://www.goodreads.com/review/list_rss/77176951?shelf=read"
+GOODREADS_WIDGET = "https://www.goodreads.com/review/custom_widget/77176951.Suzal"
 LETTERBOXD_RSS = "https://letterboxd.com/Suzal007/rss/"
 OUTPUT_FILE    = "live-data.js"
 MAX_BOOKS      = 2
@@ -47,38 +50,58 @@ def tag_text(item, *names):
     return ""
 
 
-def parse_goodreads(xml_text):
-    xml_text = strip_namespaces(xml_text)
-    try:
-        root = ET.fromstring(xml_text)
-    except ET.ParseError as e:
-        print(f"  ✗ Goodreads XML parse error: {e}")
-        return []
+def goodreads_widget_url():
+    """Build a fresh URL for the newest additions to the public read shelf."""
+    params = {
+        "cover_position": "left",
+        "cover_size": "medium",
+        "num_books": MAX_BOOKS,
+        "order": "d",
+        "shelf": "read",
+        "show_author": 1,
+        "show_rating": 1,
+        "sort": "date_added",
+        # Goodreads caches widget responses by widget_id. A fresh value prevents
+        # an old shelf snapshot from being served to the scheduled updater.
+        "widget_id": time.time_ns(),
+    }
+    return f"{GOODREADS_WIDGET}?{urllib.parse.urlencode(params)}"
+
+
+def parse_goodreads(widget_text):
+    """Parse the newest books from Goodreads' public read-shelf widget."""
+    html_text = (widget_text
+                 .replace(r"\n", "\n")
+                 .replace(r'\"', '"')
+                 .replace(r"\/", "/")
+                 .replace(r"\'", "'"))
 
     books = []
-    for item in root.iter("item"):
-        title_raw = tag_text(item, "title")
-        # Strip trailing parentheticals like "(Series, #1)" or "(Hackett Classics)"
-        title = re.sub(r"\s*\([^)]+\)\s*$", "", title_raw).strip() or title_raw
-        author = tag_text(item, "author_name")
-
-        cover   = (tag_text(item, "book_large_image_url")
-                   or tag_text(item, "book_medium_image_url")
-                   or tag_text(item, "book_image_url")
-                   or tag_text(item, "book_small_image_url"))
-        book_id = tag_text(item, "book_id")
-        link    = (f"https://www.goodreads.com/book/show/{book_id}"
-                   if book_id else tag_text(item, "link"))
-        rating  = tag_text(item, "user_rating")
-
-        if not title:
+    cards = re.split(r'<div class="gr_custom_each_container_[^"]*">', html_text)
+    for card in cards[1:]:
+        book = re.search(
+            r'<a title="(.*?)"[^>]+href="([^"]+)"><img[^>]+src="([^"]+)"',
+            card,
+            re.S,
+        )
+        author_match = re.search(
+            r'<div class="gr_custom_author_[^"]*">\s*by\s*<a[^>]*>(.*?)</a>',
+            card,
+            re.S,
+        )
+        if not book or not author_match:
             continue
+
+        title, link, cover = book.groups()
+        author = re.sub(r"<[^>]+>", "", author_match.group(1))
+        cover = re.sub(r"\._S[XY]\d+_", "._SY475_", cover)
+        rating = str(card.count("gr_flat_red_star_active.png"))
 
         books.append({
             "title":  unescape(title),
             "author": unescape(author),
             "cover":  cover,
-            "url":    link,
+            "url":    unescape(link),
             "rating": rating if rating != "0" else "",
         })
 
@@ -139,24 +162,28 @@ def parse_letterboxd(xml_text):
 def build():
     print("Fetching Goodreads recently-read…")
     try:
-        books = parse_goodreads(fetch(GOODREADS_RSS))
+        books = parse_goodreads(fetch(goodreads_widget_url()))
+        if not books:
+            raise ValueError("read shelf returned no books")
         print(f"  ✓ {len(books)} book(s)")
     except Exception as e:
         print(f"  ✗ Goodreads failed: {e}")
-        books = []
+        raise SystemExit("Library data was left unchanged.") from e
 
     print("Fetching Letterboxd recent films…")
     try:
         films = parse_letterboxd(fetch(LETTERBOXD_RSS))
+        if not films:
+            raise ValueError("feed returned no films")
         print(f"  ✓ {len(films)} film(s)")
     except Exception as e:
         print(f"  ✗ Letterboxd failed: {e}")
-        films = []
+        raise SystemExit("Library data was left unchanged.") from e
 
     js_data = json.dumps({"books": books, "films": films}, indent=2, ensure_ascii=False)
 
-    output = f"""// Auto-generated by build_live.py — do not edit this file directly.
-// To refresh: python3 build_live.py
+    output = f"""// Auto-generated from Goodreads and Letterboxd — do not edit directly.
+// Refreshed automatically by .github/workflows/update-library.yml.
 
 const LIVE_DATA = {js_data};
 """

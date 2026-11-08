@@ -15,7 +15,6 @@ build_meditations.py — compiles Markdown files in meditations/ into meditation
          title: Your Title Here
          date: June 2026
          tag: Philosophy
-         preview: One sentence shown in the listing.
          ---
 
          First paragraph of your essay.
@@ -98,6 +97,25 @@ def render_inline(text):
         text = text.replace(f"\x00MATH{i}\x00", span)
 
     return text
+
+
+def opening_preview(text):
+    """Use the article's opening prose paragraph as its listing subtext."""
+    paragraphs = re.split(r"\n\s*\n", text.strip())
+    for paragraph in paragraphs:
+        lines = [line.strip() for line in paragraph.splitlines() if line.strip()]
+        if not lines:
+            continue
+
+        first = lines[0]
+        if (first.startswith((">", "#"))
+                or re.match(r"\d+\.\s", first)
+                or re.match(r"!\[[^\]]*\]\([^)]+\)", first)):
+            continue
+
+        return render_inline(" ".join(lines))
+
+    return ""
 
 
 def md_to_html(text):
@@ -208,7 +226,7 @@ def build():
             "title":   meta.get("title",   "Untitled"),
             "date":    meta.get("date",    ""),
             "tag":     meta.get("tag",     "Essay"),
-            "preview": meta.get("preview", ""),
+            "preview": opening_preview(body),
             "body":    md_to_html(body),
         })
         print(f"  ✓  {os.path.basename(filepath)}")

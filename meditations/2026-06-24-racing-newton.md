@@ -2,7 +2,6 @@
 title: Brachistochrone by Optimization
 date: June 2026
 tag: Computation
-preview: Newton stayed up all night to solve Johann Bernoulli's brachistochrone challenge. I asked a physics-informed neural network to race him.
 ---
 
 Johann Bernoulli, in 1696, published a challenge to the 'sharpest mathematicians in all the world' in the journal <i>Acta Eruditorum</i>.

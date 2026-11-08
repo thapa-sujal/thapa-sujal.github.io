@@ -4,7 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Articles — Sujal Thapa</title>
-  <meta name="description" content="All writing by Sujal Thapa — engineering, computation, and the ideas in between." />
+  <meta name="description" content="Articles by Sujal Thapa (also spelled Suzal Thapa) — engineering, computation, and the ideas in between." />
+  <meta name="author" content="Sujal Thapa" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://suzalthapa.github.io/meditations.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Articles — Sujal Thapa" />
+  <meta property="og:description" content="Writing by Sujal Thapa on engineering, computation, and the ideas in between." />
+  <meta property="og:url" content="https://suzalthapa.github.io/meditations.html" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +26,18 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script>
+    // Typeset math in `el`, waiting for MathJax to finish loading if needed.
+    function typesetMath(el) {
+      if (!window.MathJax) return;
+      if (MathJax.typesetPromise) {
+        MathJax.typesetClear && MathJax.typesetClear([el]);
+        MathJax.typesetPromise([el]);
+      } else if (MathJax.startup && MathJax.startup.promise) {
+        MathJax.startup.promise.then(() => MathJax.typesetPromise([el]));
+      }
+    }
+  </script>
 
   <style>
     /* ── THEME TOKENS ─────────────────────────────── */
@@ -307,10 +326,7 @@
       document.getElementById('modal-title').textContent = m.title;
       const body = document.getElementById('modal-body');
       body.innerHTML = m.body;
-      if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetClear && MathJax.typesetClear([body]);
-        MathJax.typesetPromise([body]);
-      }
+      typesetMath(body);
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       requestAnimationFrame(() => modal.classList.add('open'));

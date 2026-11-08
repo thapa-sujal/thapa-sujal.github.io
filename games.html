@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Crossword — Sujal Thapa</title>
+  <meta name="description" content="Play original five-by-five mini crosswords by Sujal Thapa and Sneha Shahi." />
+  <meta name="author" content="Sujal Thapa" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://suzalthapa.github.io/games.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Mini Crossword — Sujal Thapa" />
+  <meta property="og:description" content="A growing collection of short, original five-by-five mini crosswords." />
+  <meta property="og:url" content="https://suzalthapa.github.io/games.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --page: #f5f5f1;
+      --surface: #ffffff;
+      --ink: #111111;
+      --muted: #646464;
+      --line: #d5d5d0;
+      --yellow: #ffd800;
+      --blue: #a7d8ff;
+      --red: #d64045;
+      --brand: #4a6080;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+
+    .site-header {
+      height: 64px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(245,245,241,0.94);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 max(22px, calc((100vw - 1120px) / 2));
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .brand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: -0.025em;
+    }
+    .brand em { color: var(--brand); font-style: italic; }
+    .back-link {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .back-link:hover { color: var(--brand); }
+    .back-link:focus-visible, .brand:focus-visible, button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+
+    .game-shell {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 50px 0 72px;
+    }
+    .game-heading {
+      border-bottom: 4px solid var(--ink);
+      padding-bottom: 18px;
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-end;
+    }
+    .eyebrow {
+      margin: 0 0 5px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.25rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+    }
+    .heading-meta { text-align: right; white-space: nowrap; }
+    .heading-meta p { margin: 0; }
+    .puzzle-number { font-weight: 700; }
+    .puzzle-note { font-size: 0.76rem; color: var(--muted); margin-top: 3px !important; }
+    .puzzle-credit { font-size: 0.76rem; color: var(--muted); margin-top: 3px !important; max-width: 32ch; }
+    .puzzle-library {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 6px;
+    }
+    .puzzle-choice {
+      border: 2px solid var(--ink);
+      background: var(--surface);
+      padding: 0;
+      overflow: hidden;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .puzzle-choice:hover { transform: translateY(-4px); box-shadow: 8px 8px 0 var(--yellow); }
+    .choice-preview {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      aspect-ratio: 2.15 / 1;
+      background: var(--ink);
+      gap: 2px;
+      border-bottom: 2px solid var(--ink);
+    }
+    .choice-preview span { background: white; }
+    .choice-preview .block { background: var(--ink); }
+    .choice-preview .accent { background: var(--yellow); }
+    .choice-body { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 18px; }
+    .puzzle-choice-number { font-family: Georgia, serif; font-size: 2rem; font-weight: 700; line-height: 1; }
+    .puzzle-choice-copy strong { display: block; font-family: Georgia, serif; font-size: 1.2rem; margin-bottom: 4px; }
+    .puzzle-choice-copy span { display: block; font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+    .choice-arrow { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: white; }
+    .puzzle-library[hidden], .game-experience[hidden], .heading-meta[hidden] { display: none !important; }
+    .game-toolbar { margin: -4px 0 22px; }
+    .all-puzzles {
+      border: 0;
+      background: transparent;
+      padding: 5px 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .all-puzzles:hover { color: var(--brand); }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: minmax(330px, 520px) minmax(360px, 1fr);
+      gap: clamp(36px, 7vw, 84px);
+      align-items: start;
+    }
+    .board-column { min-width: 0; }
+    .timer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 34px;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .timer {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+    .progress { color: var(--muted); }
+
+    .crossword {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      aspect-ratio: 1;
+      width: 100%;
+      border: 3px solid var(--ink);
+      background: var(--ink);
+      gap: 2px;
+      user-select: none;
+    }
+    .cell {
+      position: relative;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      background: var(--surface);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+    .cell.block { background: var(--ink); cursor: default; }
+    .cell.word { background: var(--blue); }
+    .cell.selected { background: var(--yellow); }
+    .cell.incorrect .letter { color: var(--red); }
+    .cell-number {
+      position: absolute;
+      top: 3px;
+      left: 5px;
+      font-size: clamp(0.56rem, 1.6vw, 0.72rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .letter {
+      font-size: clamp(1.55rem, 7vw, 3.45rem);
+      font-weight: 500;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    #mobile-input {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      border: 0;
+      padding: 0;
+      font-size: 16px;
+    }
+
+    .clue-strip {
+      margin-top: 12px;
+      min-height: 76px;
+      background: var(--blue);
+      border-left: 7px solid var(--yellow);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+    }
+    .clue-strip strong { font-size: 0.95rem; }
+    .clue-strip span { font-size: 0.95rem; line-height: 1.45; }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+    .control {
+      border: 1.5px solid var(--ink);
+      background: transparent;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.16s, color 0.16s, transform 0.16s;
+    }
+    .control:hover { background: var(--ink); color: white; transform: translateY(-1px); }
+    .control.primary { background: var(--ink); color: white; }
+    .control.primary:hover { background: var(--yellow); color: var(--ink); }
+
+    .clues-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      padding-top: 44px;
+    }
+    .clue-group h2 {
+      margin: 0 0 13px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.45rem;
+    }
+    .clue-list { list-style: none; margin: 0; padding: 0; }
+    .clue-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      padding: 9px 8px;
+      margin: 0 0 2px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 7px;
+      border-radius: 2px;
+      font-size: 0.91rem;
+      line-height: 1.42;
+    }
+    .clue-button strong { font-weight: 700; }
+    .clue-button:hover { background: #e6e6e0; }
+    .clue-button.active { background: var(--blue); }
+
+    .message {
+      display: none;
+      margin-top: 22px;
+      border-top: 4px solid var(--ink);
+      padding: 18px 2px 0;
+    }
+    .message.show { display: block; }
+    .message h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.8rem;
+      margin: 0 0 5px;
+    }
+    .message p { margin: 0; color: var(--muted); }
+    .message.success h2::after { content: ' ✓'; color: #168447; }
+
+    .completion-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .completion-modal.open { display: flex; }
+    .completion-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(17,17,17,0.72);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+    .completion-modal.open .completion-backdrop { opacity: 1; }
+    .completion-card {
+      position: relative;
+      width: min(100%, 430px);
+      background: var(--surface);
+      border: 3px solid var(--ink);
+      box-shadow: 12px 12px 0 var(--yellow);
+      padding: 42px 38px 34px;
+      text-align: center;
+      transform: translateY(14px) scale(0.98);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.22s ease;
+    }
+    .completion-modal.open .completion-card { transform: translateY(0) scale(1); opacity: 1; }
+    .completion-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      font-size: 1.45rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .completion-mark {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      background: var(--yellow);
+      border: 3px solid var(--ink);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .completion-kicker {
+      margin: 0 0 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .completion-card h2 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2rem, 8vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+    .completion-copy { margin: 13px auto 23px; color: var(--muted); max-width: 30ch; }
+    .completion-result {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      padding: 13px 2px;
+      margin-bottom: 24px;
+    }
+    .completion-result span { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+    .completion-result strong { font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+    .completion-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    body.modal-open { overflow: hidden; }
+
+    .more-games {
+      margin-top: 68px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .more-games h2 { margin: 0 0 4px; font-family: Georgia, serif; font-size: 1.45rem; }
+    .more-games p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    .soon { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--line); padding: 8px 12px; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 850px) {
+      .game-layout { grid-template-columns: 1fr; gap: 18px; }
+      .board-column { width: min(100%, 560px); margin: 0 auto; }
+      .clues-column { padding-top: 20px; }
+    }
+    @media (max-width: 560px) {
+      .site-header { height: 58px; }
+      .game-shell { width: min(100% - 22px, 520px); padding-top: 28px; }
+      .game-heading { align-items: flex-start; margin-bottom: 18px; }
+      .heading-meta { font-size: 0.82rem; }
+      .puzzle-note { display: none; }
+      .puzzle-credit { max-width: 22ch; }
+      .puzzle-library { grid-template-columns: 1fr; }
+      .choice-preview { aspect-ratio: 2.5 / 1; }
+      .clues-column { grid-template-columns: 1fr; gap: 25px; }
+      .cell-number { top: 2px; left: 3px; }
+      .clue-strip { min-height: 68px; padding: 12px; }
+      .more-games { align-items: flex-start; }
+      .completion-card { padding: 38px 24px 28px; box-shadow: 8px 8px 0 var(--yellow); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand" aria-label="Sujal Thapa home">S<em>.</em>T</a>
+    <a href="index.html#games" class="back-link"><span aria-hidden="true">←</span> Back to site</a>
+  </header>
+
+  <main class="game-shell">
+    <div class="game-heading">
+      <div>
+        <p class="eyebrow">Games</p>
+        <h1 id="page-title">Mini Crosswords</h1>
+      </div>
+      <div class="heading-meta" id="heading-meta" hidden>
+        <p class="puzzle-number" id="puzzle-number">Mini #1</p>
+        <p class="puzzle-credit" id="puzzle-credit">By Sujal Thapa</p>
+      </div>
+    </div>
+
+    <section class="puzzle-library" id="puzzle-library" aria-label="Choose a mini crossword">
+      <button class="puzzle-choice" type="button" data-puzzle-index="0">
+        <span class="choice-preview" aria-hidden="true">
+          <span class="block"></span><span class="block"></span><span class="accent"></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span class="block"></span><span class="block"></span>
+          <span></span><span></span><span></span><span></span><span class="block"></span>
+        </span>
+        <span class="choice-body">
+          <span class="puzzle-choice-number">01</span>
+          <span class="puzzle-choice-copy"><strong>Mini #1</strong><span>By Sujal Thapa</span></span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </span>
+      </button>
+      <button class="puzzle-choice" type="button" data-puzzle-index="1">
+        <span class="choice-preview" aria-hidden="true">
+          <span class="block"></span><span class="block"></span><span class="accent"></span><span></span><span></span>
+          <span class="block"></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span class="block"></span>
+          <span></span><span></span><span></span><span class="block"></span><span class="block"></span>
+        </span>
+        <span class="choice-body">
+          <span class="puzzle-choice-number">02</span>
+          <span class="puzzle-choice-copy"><strong>Mini #2</strong><span>By Sneha Shahi · Edited by Sujal Thapa</span></span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </span>
+      </button>
+    </section>
+
+    <div class="game-experience" id="game-experience" hidden>
+      <div class="game-toolbar">
+        <button class="all-puzzles" id="all-puzzles" type="button"><span aria-hidden="true">←</span> All puzzles</button>
+      </div>
+      <div class="game-layout">
+      <section class="board-column" aria-label="Mini crossword puzzle">
+        <div class="timer-row">
+          <span class="progress" id="progress">0 of 20 squares</span>
+          <span class="timer" id="timer" aria-label="Elapsed time">00:00</span>
+        </div>
+
+        <div class="crossword" id="crossword" role="grid" aria-label="Five by five crossword grid"></div>
+        <input id="mobile-input" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" maxlength="1" aria-label="Type a crossword letter" />
+
+        <div class="clue-strip" id="clue-strip" aria-live="polite">
+          <strong id="active-clue-label">1A</strong>
+          <span id="active-clue-text">Bring back to life</span>
+        </div>
+
+        <div class="controls" aria-label="Puzzle controls">
+          <button class="control primary" id="check-button" type="button">Check puzzle</button>
+          <button class="control" id="reveal-button" type="button">Reveal word</button>
+          <button class="control" id="reset-button" type="button">Reset</button>
+        </div>
+
+        <div class="message" id="message" role="status" aria-live="polite">
+          <h2 id="message-title"></h2>
+          <p id="message-text"></p>
+        </div>
+      </section>
+
+      <aside class="clues-column" aria-label="Crossword clues">
+        <section class="clue-group">
+          <h2>Across</h2>
+          <ol class="clue-list" id="across-clues"></ol>
+        </section>
+        <section class="clue-group">
+          <h2>Down</h2>
+          <ol class="clue-list" id="down-clues"></ol>
+        </section>
+      </aside>
+      </div>
+
+      <section class="more-games" aria-label="More games">
+        <div>
+          <h2>More small games are coming.</h2>
+          <p>This corner of the site will grow one puzzle at a time.</p>
+        </div>
+        <span class="soon">Coming soon</span>
+      </section>
+    </div>
+  </main>
+
+  <div class="completion-modal" id="completion-modal" role="dialog" aria-modal="true" aria-labelledby="completion-title" aria-describedby="completion-description" aria-hidden="true">
+    <div class="completion-backdrop" id="completion-backdrop"></div>
+    <div class="completion-card">
+      <button class="completion-close" id="completion-close" type="button" aria-label="Close result popup">×</button>
+      <div class="completion-mark" aria-hidden="true">✓</div>
+      <p class="completion-kicker" id="completion-kicker">Mini #1</p>
+      <h2 id="completion-title">Puzzle solved!</h2>
+      <p class="completion-copy" id="completion-description">Every square is right. Nicely done.</p>
+      <div class="completion-result">
+        <span>Your time</span>
+        <strong id="completion-time">00:00</strong>
+      </div>
+      <div class="completion-actions">
+        <button class="control primary" id="completion-done" type="button">Done</button>
+        <button class="control" id="play-again" type="button">Play again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sr-only" id="screen-reader-status" aria-live="assertive"></div>
+
+  <script>
+    const puzzles = [
+      {
+        number: 1,
+        title: 'Mini #1',
+        credit: 'By Sujal Thapa',
+        size: 5,
+        solution: [
+          [null, null, 'R', 'E', 'S'],
+          ['O', 'B', 'O', 'E', 'S'],
+          ['D', 'O', 'Y', 'L', 'E'],
+          ['D', 'R', 'A', null, null],
+          ['S', 'E', 'L', 'L', null]
+        ],
+        numbers: { '0-2': '1', '0-3': '2', '0-4': '3', '1-0': '4', '1-1': '5', '2-0': '6', '3-0': '7', '4-0': '8' },
+        entries: [
+          { id: 'a1', direction: 'across', label: '1', clue: 'Bring back to life', cells: ['0-2', '0-3', '0-4'] },
+          { id: 'a4', direction: 'across', label: '4', clue: 'Capt. Holt was kicked out of a concert for gasping too loud at these', cells: ['1-0', '1-1', '1-2', '1-3', '1-4'] },
+          { id: 'a6', direction: 'across', label: '6', clue: 'Real-life Dr. Watson', cells: ['2-0', '2-1', '2-2', '2-3', '2-4'] },
+          { id: 'a7', direction: 'across', label: '7', clue: 'Spanish title for a female doctor', cells: ['3-0', '3-1', '3-2'] },
+          { id: 'a8', direction: 'across', label: '8', clue: 'What you do with your soul at the crossroads', cells: ['4-0', '4-1', '4-2', '4-3'] },
+          { id: 'd1', direction: 'down', label: '1', clue: 'Excellence, aptly', cells: ['0-2', '1-2', '2-2', '3-2', '4-2'] },
+          { id: 'd2', direction: 'down', label: '2', clue: 'Electric snakes!', cells: ['0-3', '1-3', '2-3'] },
+          { id: 'd3', direction: 'down', label: '3', clue: 'Opposite of NNW', cells: ['0-4', '1-4', '2-4'] },
+          { id: 'd4', direction: 'down', label: '4', clue: 'What to analyze before placing bets', cells: ['1-0', '2-0', '3-0', '4-0'] },
+          { id: 'd5', direction: 'down', label: '5', clue: 'Dull', cells: ['1-1', '2-1', '3-1', '4-1'] }
+        ]
+      },
+      {
+        number: 2,
+        title: 'Mini #2',
+        credit: 'By Sneha Shahi · Edited by Sujal Thapa',
+        size: 5,
+        solution: [
+          [null, null, 'M', 'D', 'S'],
+          [null, 'S', 'O', 'A', 'K'],
+          ['P', 'E', 'T', 'R', 'I'],
+          ['E', 'M', 'I', 'T', null],
+          ['G', 'I', 'F', null, null]
+        ],
+        numbers: { '0-2': '1', '0-3': '6', '0-4': '7', '1-1': '2', '2-0': '3', '3-0': '4', '4-0': '5' },
+        entries: [
+          { id: 'a1', direction: 'across', label: '1', clue: 'Graduates who know a thing or two about human bodies', cells: ['0-2', '0-3', '0-4'] },
+          { id: 'a2', direction: 'across', label: '2', clue: 'Prep step for rice (if you have the time)', cells: ['1-1', '1-2', '1-3', '1-4'] },
+          { id: 'a3', direction: 'across', label: '3', clue: '____ dish (under a microscope)', cells: ['2-0', '2-1', '2-2', '2-3', '2-4'] },
+          { id: 'a4', direction: 'across', label: '4', clue: 'Radiate', cells: ['3-0', '3-1', '3-2', '3-3'] },
+          { id: 'a5', direction: 'across', label: '5', clue: 'Moving picture?', cells: ['4-0', '4-1', '4-2'] },
+          { id: 'd1', direction: 'down', label: '1', clue: 'Recurring theme in music', cells: ['0-2', '1-2', '2-2', '3-2', '4-2'] },
+          { id: 'd6', direction: 'down', label: '6', clue: 'Pointy thing thrown at a board', cells: ['0-3', '1-3', '2-3', '3-3'] },
+          { id: 'd7', direction: 'down', label: '7', clue: 'A board for snowy fun', cells: ['0-4', '1-4', '2-4'] },
+          { id: 'd3', direction: 'down', label: '3', clue: 'A board to hang your tools', cells: ['2-0', '3-0', '4-0'] }
+        ]
+      }
+    ];
+
+    let puzzle = puzzles[0];
+
+    const cells = new Map();
+    const values = {};
+    const incorrect = new Set();
+    let selectedCell = '0-2';
+    let activeEntryId = 'a1';
+    let elapsedSeconds = 0;
+    let timerStarted = false;
+    let timerInterval = null;
+    let solved = false;
+    let lastFocusedElement = null;
+
+    const board = document.getElementById('crossword');
+    const mobileInput = document.getElementById('mobile-input');
+    const activeClueLabel = document.getElementById('active-clue-label');
+    const activeClueText = document.getElementById('active-clue-text');
+    const progressEl = document.getElementById('progress');
+    const timerEl = document.getElementById('timer');
+    const statusEl = document.getElementById('screen-reader-status');
+    const message = document.getElementById('message');
+    const completionModal = document.getElementById('completion-modal');
+    const completionClose = document.getElementById('completion-close');
+    const puzzleLibrary = document.getElementById('puzzle-library');
+    const gameExperience = document.getElementById('game-experience');
+    const headingMeta = document.getElementById('heading-meta');
+    const pageTitle = document.getElementById('page-title');
+
+    let playableKeys = [];
+    let activePuzzleIndex = 0;
+
+    function loadPuzzle(index, updateAddress = true) {
+      activePuzzleIndex = index;
+      puzzle = puzzles[index];
+      closeCompletionPopup(false);
+      puzzleLibrary.hidden = true;
+      gameExperience.hidden = false;
+      headingMeta.hidden = false;
+      pageTitle.textContent = 'Mini Crossword';
+
+      if (timerInterval) window.clearInterval(timerInterval);
+      timerInterval = null;
+      elapsedSeconds = 0;
+      timerStarted = false;
+      solved = false;
+      incorrect.clear();
+      cells.clear();
+      playableKeys = [];
+      Object.keys(values).forEach(key => delete values[key]);
+      board.innerHTML = '';
+      document.getElementById('across-clues').innerHTML = '';
+      document.getElementById('down-clues').innerHTML = '';
+      mobileInput.value = '';
+
+      activeEntryId = puzzle.entries[0].id;
+      selectedCell = puzzle.entries[0].cells[0];
+      document.getElementById('puzzle-number').textContent = `Mini #${puzzle.number}`;
+      document.getElementById('puzzle-credit').textContent = puzzle.credit;
+      document.getElementById('completion-kicker').textContent = `Mini #${puzzle.number}`;
+      document.title = `Mini Crossword #${puzzle.number} — Sujal Thapa`;
+
+      puzzle.solution.forEach((row, rowIndex) => {
+        row.forEach((answer, columnIndex) => {
+          const key = `${rowIndex}-${columnIndex}`;
+          if (answer === null) {
+            const block = document.createElement('div');
+            block.className = 'cell block';
+            block.setAttribute('role', 'gridcell');
+            block.setAttribute('aria-label', 'Black square');
+            board.appendChild(block);
+            return;
+          }
+
+          playableKeys.push(key);
+          values[key] = '';
+          const cell = document.createElement('button');
+          cell.type = 'button';
+          cell.className = 'cell';
+          cell.dataset.key = key;
+          cell.setAttribute('role', 'gridcell');
+          cell.setAttribute('aria-label', `Row ${rowIndex + 1}, column ${columnIndex + 1}, empty`);
+          cell.innerHTML = `${puzzle.numbers[key] ? `<span class="cell-number">${puzzle.numbers[key]}</span>` : ''}<span class="letter"></span>`;
+          cell.addEventListener('click', () => selectCell(key, true));
+          cells.set(key, cell);
+          board.appendChild(cell);
+        });
+      });
+
+      renderClues();
+      updateTimer();
+      hideMessage();
+      renderState();
+      statusEl.textContent = `Mini crossword number ${puzzle.number} loaded. ${puzzle.credit}.`;
+      if (updateAddress) window.history.replaceState({}, '', `games.html?puzzle=${puzzle.number}`);
+    }
+
+    function showPuzzleLibrary(updateAddress = true) {
+      closeCompletionPopup(false);
+      if (timerInterval) window.clearInterval(timerInterval);
+      timerInterval = null;
+      timerStarted = false;
+      puzzleLibrary.hidden = false;
+      gameExperience.hidden = true;
+      headingMeta.hidden = true;
+      pageTitle.textContent = 'Mini Crosswords';
+      document.title = 'Mini Crosswords — Sujal Thapa';
+      statusEl.textContent = 'Choose a mini crossword to play.';
+      if (updateAddress) window.history.replaceState({}, '', 'games.html');
+      document.querySelector('.puzzle-choice')?.focus({ preventScroll: true });
+    }
+
+    function renderClues() {
+      const groups = {
+        across: document.getElementById('across-clues'),
+        down: document.getElementById('down-clues')
+      };
+      puzzle.entries.forEach(entry => {
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'clue-button';
+        button.dataset.entry = entry.id;
+        button.innerHTML = `<strong>${entry.label}</strong><span>${entry.clue}</span>`;
+        button.addEventListener('click', () => selectEntry(entry.id));
+        item.appendChild(button);
+        groups[entry.direction].appendChild(item);
+      });
+    }
+
+    function getEntry(id = activeEntryId) {
+      return puzzle.entries.find(entry => entry.id === id);
+    }
+
+    function entriesForCell(key) {
+      return puzzle.entries.filter(entry => entry.cells.includes(key));
+    }
+
+    function selectCell(key, allowToggle = false) {
+      const options = entriesForCell(key);
+      if (!options.length) return;
+
+      if (allowToggle && selectedCell === key && options.length > 1) {
+        const alternate = options.find(entry => entry.id !== activeEntryId);
+        if (alternate) activeEntryId = alternate.id;
+      } else {
+        const currentDirection = getEntry()?.direction;
+        const sameDirection = options.find(entry => entry.direction === currentDirection);
+        activeEntryId = (sameDirection || options[0]).id;
+      }
+      selectedCell = key;
+      renderState();
+      mobileInput.value = '';
+      mobileInput.focus({ preventScroll: true });
+    }
+
+    function selectEntry(id) {
+      activeEntryId = id;
+      const entry = getEntry();
+      selectedCell = entry.cells.find(key => !values[key]) || entry.cells[0];
+      renderState();
+      mobileInput.value = '';
+      mobileInput.focus({ preventScroll: true });
+    }
+
+    function renderState() {
+      const activeEntry = getEntry();
+      const activeCells = new Set(activeEntry.cells);
+      cells.forEach((cell, key) => {
+        cell.classList.toggle('word', activeCells.has(key));
+        cell.classList.toggle('selected', key === selectedCell);
+        cell.classList.toggle('incorrect', incorrect.has(key));
+        cell.querySelector('.letter').textContent = values[key];
+        const [row, column] = key.split('-').map(Number);
+        cell.setAttribute('aria-label', `Row ${row + 1}, column ${column + 1}, ${values[key] || 'empty'}${key === selectedCell ? ', selected' : ''}`);
+      });
+
+      document.querySelectorAll('.clue-button').forEach(button => {
+        button.classList.toggle('active', button.dataset.entry === activeEntryId);
+      });
+      activeClueLabel.textContent = `${activeEntry.label}${activeEntry.direction === 'across' ? 'A' : 'D'}`;
+      activeClueText.textContent = activeEntry.clue;
+      const filled = playableKeys.filter(key => values[key]).length;
+      progressEl.textContent = `${filled} of ${playableKeys.length} squares`;
+    }
+
+    function startTimer() {
+      if (timerStarted || solved) return;
+      timerStarted = true;
+      timerInterval = window.setInterval(() => {
+        elapsedSeconds += 1;
+        updateTimer();
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
+      const seconds = (elapsedSeconds % 60).toString().padStart(2, '0');
+      timerEl.textContent = `${minutes}:${seconds}`;
+    }
+
+    function enterLetter(letter) {
+      if (solved || !/^[A-Z]$/.test(letter)) return;
+      startTimer();
+      values[selectedCell] = letter;
+      incorrect.delete(selectedCell);
+      const entry = getEntry();
+      const index = entry.cells.indexOf(selectedCell);
+      const nextEmpty = entry.cells.slice(index + 1).find(key => !values[key]);
+      if (nextEmpty) selectedCell = nextEmpty;
+      else if (index < entry.cells.length - 1) selectedCell = entry.cells[index + 1];
+      renderState();
+      checkAutomaticCompletion();
+    }
+
+    function eraseLetter() {
+      if (solved) return;
+      startTimer();
+      const entry = getEntry();
+      const index = entry.cells.indexOf(selectedCell);
+      if (values[selectedCell]) {
+        values[selectedCell] = '';
+        incorrect.delete(selectedCell);
+      } else if (index > 0) {
+        selectedCell = entry.cells[index - 1];
+        values[selectedCell] = '';
+        incorrect.delete(selectedCell);
+      }
+      hideMessage();
+      renderState();
+    }
+
+    function moveSelection(rowDelta, columnDelta) {
+      const [row, column] = selectedCell.split('-').map(Number);
+      let nextRow = row + rowDelta;
+      let nextColumn = column + columnDelta;
+      while (nextRow >= 0 && nextRow < puzzle.size && nextColumn >= 0 && nextColumn < puzzle.size) {
+        const key = `${nextRow}-${nextColumn}`;
+        if (cells.has(key)) {
+          selectedCell = key;
+          const direction = rowDelta !== 0 ? 'down' : 'across';
+          const matchingEntry = entriesForCell(key).find(entry => entry.direction === direction);
+          if (matchingEntry) activeEntryId = matchingEntry.id;
+          renderState();
+          return;
+        }
+        nextRow += rowDelta;
+        nextColumn += columnDelta;
+      }
+    }
+
+    function cycleEntry(step = 1) {
+      const current = puzzle.entries.findIndex(entry => entry.id === activeEntryId);
+      const next = (current + step + puzzle.entries.length) % puzzle.entries.length;
+      selectEntry(puzzle.entries[next].id);
+    }
+
+    function solutionAt(key) {
+      const [row, column] = key.split('-').map(Number);
+      return puzzle.solution[row][column];
+    }
+
+    function isCompleteAndCorrect() {
+      return playableKeys.every(key => values[key] === solutionAt(key));
+    }
+
+    function checkAutomaticCompletion() {
+      if (playableKeys.every(key => values[key]) && isCompleteAndCorrect()) finishPuzzle();
+    }
+
+    function checkPuzzle() {
+      incorrect.clear();
+      playableKeys.forEach(key => {
+        if (values[key] && values[key] !== solutionAt(key)) incorrect.add(key);
+      });
+      renderState();
+
+      if (isCompleteAndCorrect()) {
+        finishPuzzle();
+      } else if (incorrect.size) {
+        showMessage('Not quite yet', `${incorrect.size} square${incorrect.size === 1 ? '' : 's'} need another look.`);
+        statusEl.textContent = `${incorrect.size} incorrect squares.`;
+      } else {
+        showMessage('So far, so good', 'Everything you have entered is correct. Keep going.');
+        statusEl.textContent = 'All entered letters are correct.';
+      }
+    }
+
+    function revealWord() {
+      if (solved) return;
+      startTimer();
+      const entry = getEntry();
+      entry.cells.forEach(key => {
+        values[key] = solutionAt(key);
+        incorrect.delete(key);
+      });
+      renderState();
+      showMessage('Word revealed', `${entry.label} ${entry.direction} has been filled in.`);
+      statusEl.textContent = `${entry.label} ${entry.direction} revealed.`;
+      checkAutomaticCompletion();
+    }
+
+    function finishPuzzle() {
+      solved = true;
+      if (timerInterval) window.clearInterval(timerInterval);
+      incorrect.clear();
+      renderState();
+      const time = timerEl.textContent;
+      message.classList.add('success');
+      showMessage('Puzzle solved', `You finished Mini #${puzzle.number} in ${time}. Nicely done.`);
+      statusEl.textContent = `Puzzle solved in ${time}.`;
+      openCompletionPopup(time);
+    }
+
+    function openCompletionPopup(time) {
+      lastFocusedElement = document.activeElement;
+      document.getElementById('completion-time').textContent = time;
+      completionModal.classList.add('open');
+      completionModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      window.requestAnimationFrame(() => completionClose.focus());
+    }
+
+    function closeCompletionPopup(restoreFocus = true) {
+      completionModal.classList.remove('open');
+      completionModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      if (restoreFocus && lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus({ preventScroll: true });
+      }
+    }
+
+    function resetPuzzle() {
+      closeCompletionPopup(false);
+      playableKeys.forEach(key => { values[key] = ''; });
+      incorrect.clear();
+      selectedCell = puzzle.entries[0].cells[0];
+      activeEntryId = puzzle.entries[0].id;
+      elapsedSeconds = 0;
+      timerStarted = false;
+      solved = false;
+      if (timerInterval) window.clearInterval(timerInterval);
+      timerInterval = null;
+      updateTimer();
+      hideMessage();
+      renderState();
+      statusEl.textContent = 'Puzzle reset.';
+    }
+
+    function showMessage(title, text) {
+      document.getElementById('message-title').textContent = title;
+      document.getElementById('message-text').textContent = text;
+      message.classList.add('show');
+    }
+
+    function hideMessage() {
+      message.classList.remove('show', 'success');
+    }
+
+    document.addEventListener('keydown', event => {
+      if (completionModal.classList.contains('open')) {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeCompletionPopup();
+        } else if (event.key === 'Tab') {
+          const focusable = Array.from(completionModal.querySelectorAll('button'));
+          const current = focusable.indexOf(document.activeElement);
+          const next = event.shiftKey
+            ? (current <= 0 ? focusable.length - 1 : current - 1)
+            : (current === focusable.length - 1 ? 0 : current + 1);
+          event.preventDefault();
+          focusable[next].focus();
+        }
+        return;
+      }
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const key = event.key;
+      if (/^[a-zA-Z]$/.test(key)) {
+        event.preventDefault();
+        enterLetter(key.toUpperCase());
+      } else if (key === 'Backspace' || key === 'Delete') {
+        event.preventDefault();
+        eraseLetter();
+      } else if (key === 'ArrowUp') {
+        event.preventDefault(); moveSelection(-1, 0);
+      } else if (key === 'ArrowDown') {
+        event.preventDefault(); moveSelection(1, 0);
+      } else if (key === 'ArrowLeft') {
+        event.preventDefault(); moveSelection(0, -1);
+      } else if (key === 'ArrowRight') {
+        event.preventDefault(); moveSelection(0, 1);
+      } else if (key === 'Tab') {
+        event.preventDefault(); cycleEntry(event.shiftKey ? -1 : 1);
+      } else if (key === 'Enter' || key === ' ') {
+        const options = entriesForCell(selectedCell);
+        if (options.length > 1) {
+          event.preventDefault();
+          const alternate = options.find(entry => entry.id !== activeEntryId);
+          if (alternate) { activeEntryId = alternate.id; renderState(); }
+        }
+      }
+    });
+
+    mobileInput.addEventListener('input', event => {
+      const letter = event.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(-1);
+      event.target.value = '';
+      if (letter) enterLetter(letter);
+    });
+
+    document.getElementById('check-button').addEventListener('click', checkPuzzle);
+    document.getElementById('reveal-button').addEventListener('click', revealWord);
+    document.getElementById('reset-button').addEventListener('click', resetPuzzle);
+    completionClose.addEventListener('click', () => closeCompletionPopup());
+    document.getElementById('completion-done').addEventListener('click', () => closeCompletionPopup());
+    document.getElementById('completion-backdrop').addEventListener('click', () => closeCompletionPopup());
+    document.getElementById('play-again').addEventListener('click', resetPuzzle);
+    document.getElementById('all-puzzles').addEventListener('click', () => showPuzzleLibrary());
+    document.querySelectorAll('.puzzle-choice').forEach(button => {
+      button.addEventListener('click', () => loadPuzzle(Number(button.dataset.puzzleIndex)));
+    });
+
+    const requestedPuzzle = new URLSearchParams(window.location.search).get('puzzle');
+    if (requestedPuzzle === '2') loadPuzzle(1, false);
+    else if (requestedPuzzle === '1') loadPuzzle(0, false);
+    else showPuzzleLibrary(false);
+  </script>
+</body>
+</html>
