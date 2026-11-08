@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://suzalthapa.github.io/sitemap.xml
+Sitemap: https://thapa-sujal.github.io/sitemap.xml
