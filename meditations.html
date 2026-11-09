@@ -13,10 +13,6 @@
   <meta property="og:description" content="Writing by Sujal Thapa on engineering, computation, and the ideas in between." />
   <meta property="og:url" content="https://thapa-sujal.github.io/meditations.html" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-
   <!-- MathJax for LaTeX in meditations -->
   <script>
     window.MathJax = {
@@ -76,7 +72,7 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', system-ui, sans-serif; background-color: var(--bg); color: var(--tx2); line-height: 1.6; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
+    body { font-family: Arial, Helvetica, sans-serif; background-color: var(--bg); color: var(--tx2); line-height: 1.6; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
 
     /* Grain */
     body::after {
@@ -89,7 +85,7 @@
     /* Nav */
     .nav-link {
       position: relative; color: var(--tx5);
-      font-size: 0.8125rem; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none;
+      font-size: 0.875rem; letter-spacing: 0; text-decoration: none;
       transition: color 0.2s;
     }
     .nav-link::after {
@@ -104,7 +100,7 @@
     /* Back link */
     .back-link {
       display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 0.875rem; font-weight: 600; letter-spacing: 0;
       color: var(--tx5); text-decoration: none;
       transition: color 0.2s, gap 0.2s;
     }
@@ -133,11 +129,11 @@
     .essay-row:hover .er-arrow { opacity: 1; transform: translateX(4px); }
     .essay-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
-    .er-num { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--tx6); line-height: 1; padding-top: 3px; }
+    .er-num { font-family: Arial, Helvetica, sans-serif; font-size: 0.875rem; font-weight: 400; color: var(--tx6); line-height: 1; padding-top: 5px; }
     .er-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
-    .er-tag { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: rgba(var(--accent-rgb),0.08); border: 1px solid rgba(var(--accent-rgb),0.18); padding: 2px 8px; border-radius: 100px; }
+    .er-tag { font-size: 0.8125rem; font-weight: 500; letter-spacing: 0; color: var(--accent); background: none; border: 0; padding: 0; }
     .er-date { font-size: 0.8125rem; color: var(--tx6); }
-    .er-title { font-family: 'Cormorant Garamond', serif; font-size: 1.375rem; font-weight: 600; color: var(--tx1); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 7px; transition: color 0.2s; }
+    .er-title { font-family: Arial, Helvetica, sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--tx1); letter-spacing: -0.015em; line-height: 1.25; margin-bottom: 7px; transition: color 0.2s; }
     .er-preview { font-size: 0.875rem; line-height: 1.65; color: var(--tx5); max-width: 64ch; }
     .er-arrow { font-size: 1.125rem; color: var(--accent); opacity: 0; transform: translateX(0); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); padding-top: 4px; }
 
@@ -157,12 +153,12 @@
     }
     #modal-content {
       position: relative; z-index: 1;
-      background: var(--card); border-radius: 18px;
+      background: var(--card); border-radius: 2px;
       width: 100%; max-width: 680px;
       padding: 56px 60px;
       opacity: 0; transform: translateY(16px);
       transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1), background 0.3s;
-      box-shadow: 0 8px 40px rgba(var(--sh-rgb),0.18), 0 32px 80px rgba(var(--sh-rgb),0.1);
+      box-shadow: 0 12px 40px rgba(var(--sh-rgb),0.18);
     }
     #modal-close {
       position: absolute; top: 20px; right: 24px;
@@ -180,12 +176,12 @@
     .modal-body-text a:hover { color: var(--accent-lt); border-bottom-color: var(--accent); }
     .modal-body-text a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
     .modal-body-text code { font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: 0.88em; background: rgba(var(--accent-rgb),0.08); padding: 1px 5px; border-radius: 4px; }
-    .modal-body-text blockquote { margin: 26px 0; padding: 2px 0 2px 24px; border-left: 2px solid var(--accent); font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; line-height: 1.5; color: var(--tx2); }
+    .modal-body-text blockquote { margin: 26px 0; padding: 2px 0 2px 24px; border-left: 2px solid var(--accent); font-family: Georgia, serif; font-size: 1.15rem; font-style: italic; line-height: 1.6; color: var(--tx2); }
     .modal-body-text blockquote a { font-style: normal; }
     .modal-body-text ol { list-style: none; counter-reset: med; margin: 0 0 18px; padding: 0; }
     .modal-body-text ol > li { counter-increment: med; position: relative; padding-left: 46px; margin-bottom: 24px; font-size: 1.0125rem; line-height: 1.85; color: var(--tx3); }
     .modal-body-text ol > li:last-child { margin-bottom: 0; }
-    .modal-body-text ol > li::before { content: counter(med); position: absolute; left: 0; top: -2px; width: 30px; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--accent); text-align: right; }
+    .modal-body-text ol > li::before { content: counter(med); position: absolute; left: 0; top: 2px; width: 30px; font-family: Arial, Helvetica, sans-serif; font-size: 1rem; font-weight: 600; color: var(--accent); text-align: right; }
     .modal-body-text ol > li strong { color: var(--tx1); font-weight: 600; }
     .modal-body-text figure.med-figure { margin: 32px 0; }
     .modal-body-text figure.med-figure img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid rgba(var(--accent-rgb),0.15); background: #fff; box-shadow: 0 4px 18px rgba(var(--sh-rgb),0.08); }
@@ -215,8 +211,8 @@
   <!-- ── NAV ── -->
   <header style="position:sticky;top:0;z-index:100;background:rgba(251,245,236,0.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(74,96,128,0.09);">
     <div style="max-width:720px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;">
-      <a href="index.html" style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1A1E26;text-decoration:none;letter-spacing:-0.025em;">
-        Sujal <span style="color:#4A6080;font-style:italic;">·</span> ME
+      <a href="index.html" style="font-family:Arial,Helvetica,sans-serif;font-size:1rem;font-weight:700;color:#1A1E26;text-decoration:none;letter-spacing:-0.015em;">
+        Sujal Thapa
       </a>
       <div style="display:flex;align-items:center;gap:10px;">
         <button id="theme-toggle" aria-label="Toggle dark mode">
@@ -239,10 +235,7 @@
 
   <!-- ── PAGE HEADER ── -->
   <div style="max-width:720px;margin:0 auto;padding:64px 24px 56px;position:relative;">
-    <div style="position:absolute;top:0;right:0;width:400px;height:400px;pointer-events:none;background:radial-gradient(ellipse at top right,rgba(74,96,128,0.07),transparent 65%);"></div>
-
-    <span style="font-size:0.75rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#4A6080;display:block;margin-bottom:12px;">Writing</span>
-    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,3.75rem);font-weight:600;color:#1A1E26;letter-spacing:-0.03em;line-height:1.08;margin-bottom:16px;">Articles</h1>
+    <h1 style="font-family:Arial,Helvetica,sans-serif;font-size:clamp(2.5rem,6vw,3.75rem);font-weight:600;color:#1A1E26;letter-spacing:-0.045em;line-height:1.08;margin-bottom:16px;">Articles</h1>
     <p style="font-size:1rem;line-height:1.75;color:#4A5060;max-width:48ch;">
       Short pieces on engineering, computation, and the ideas that don't fit neatly into a methods section. Newest first.
     </p>
@@ -278,10 +271,10 @@
         </svg>
       </button>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-        <span id="modal-tag" style="font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#4A6080;background:rgba(74,96,128,0.08);border:1px solid rgba(74,96,128,0.18);padding:2px 8px;border-radius:100px;"></span>
+        <span id="modal-tag" style="font-size:0.8125rem;font-weight:500;color:#4A6080;"></span>
         <span id="modal-date" style="font-size:0.8125rem;color:#9AA0AA;"></span>
       </div>
-      <h2 id="modal-title" style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.75rem,4vw,2.5rem);font-weight:600;color:#1A1E26;letter-spacing:-0.02em;line-height:1.12;margin-bottom:32px;"></h2>
+      <h2 id="modal-title" style="font-family:Arial,Helvetica,sans-serif;font-size:clamp(1.75rem,4vw,2.5rem);font-weight:600;color:#1A1E26;letter-spacing:-0.03em;line-height:1.12;margin-bottom:32px;"></h2>
       <div style="width:40px;height:2px;background:#4A6080;border-radius:2px;margin-bottom:32px;"></div>
       <div id="modal-body" class="modal-body-text"></div>
     </div>
