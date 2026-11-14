@@ -4,18 +4,18 @@
 const LIVE_DATA = {
   "books": [
     {
+      "title": "King Lear",
+      "author": "William Shakespeare",
+      "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331563731l/12938._SY475_.jpg",
+      "url": "https://www.goodreads.com/review/show/9103225980?utm_medium=api&utm_source=custom_widget",
+      "rating": "5"
+    },
+    {
       "title": "What Men Live by and Other Tales",
       "author": "Leo Tolstoy",
       "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348022196l/407154._SY475_.jpg",
       "url": "https://www.goodreads.com/review/show/9000073122?utm_medium=api&utm_source=custom_widget",
       "rating": "3"
-    },
-    {
-      "title": "Hamlet",
-      "author": "William Shakespeare",
-      "cover": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351051208l/1420._SY475_.jpg",
-      "url": "https://www.goodreads.com/review/show/9000071588?utm_medium=api&utm_source=custom_widget",
-      "rating": "5"
     }
   ],
   "films": [
